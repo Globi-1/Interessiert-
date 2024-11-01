@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interaktive Seite</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        .page {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            flex-direction: column;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        #page1 {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            display: flex;
+        }
+        #page2 {
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4);
+            color: white;
+        }
+        #page3 {
+            background-color: #000;
+            overflow: hidden;
+        }
+        #smiley {
+            font-size: 100px;
+            animation: dance 1s infinite alternate;
+        }
+        #button {
+            margin-top: 20px;
+            padding: 15px 30px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            display: none;
+        }
+        @keyframes dance {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-20px); }
+        }
+        @keyframes explode {
+            0% { transform: scale(0); opacity: 1; }
+            50% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+        .button {
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: white;
+            color: black;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #fireworks, #speech, #socialLinks {
+            position: absolute;
+        }
+        #fireworks {
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+        }
+        #speech, #socialLinks {
+            display: none;
+            text-align: center;
+            z-index: 1;
+        }
+        #speech {
+            top: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 24px;
+        }
+        #socialLinks {
+            font-size: 24px;
+            color: #fff;
+            margin-top: 80px;
+        }
+        #socialLinks img {
+            width: 30px;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        .firework {
+            position: absolute;
+            border-radius: 50%;
+            background-color: hsl(0, 100%, 50%);
+            animation: explode 1.5s ease-out forwards;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.9);
+        }
+        #errorModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            z-index: 20;
+        }
+        #errorModal button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Seite 1: Tanzender Smiley -->
+    <div id="page1" class="page">
+        <div id="smiley">😊</div>
+        <button id="button" onclick="showPage2()">Drück mich</button>
+    </div>
+
+    <!-- Seite 2: Interessiert an mir? -->
+    <div id="page2" class="page">
+        <h1>Interessiert an mir?</h1>
+        <button class="button" onclick="showError()">Nein</button>
+        <button class="button" onclick="showPage3()">Ja Sicher ;)</button>
+    </div>
+
+    <!-- Seite 3: Feuerwerk und Gratulation -->
+    <div id="page3" class="page">
+        <div id="fireworks"></div>
+        <div id="speech">Gratulation, ich lade dich zu einem Drink ein</div>
+        <div id="socialLinks">
+            <div>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram Logo">
+                timengler05
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal für Error-Meldung -->
+    <div id="errorModal">
+        <p>Error: Diese Aktion ist nicht erlaubt!</p>
+        <button onclick="hideError()">Schließen</button>
+    </div>
+
+    <script>
+        // Initialisierung der ersten Seite
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById('page1').style.display = 'flex';
+            setTimeout(() => {
+                document.getElementById('button').style.display = 'block';
+            }, 3000);
+        });
+
+        // Zeige Seite 2
+        function showPage2() {
+            document.getElementById('page1').style.display = 'none';
+            document.getElementById('page2').style.display = 'flex';
+        }
+
+        // Zeige Seite 3 und starte Feuerwerk
+        function showPage3() {
+            document.getElementById('page2').style.display = 'none';
+            document.getElementById('page3').style.display = 'flex';
+            startFireworks();
+        }
+
+        // Zeige Fehlermeldung
+        function showError() {
+            document.getElementById('errorModal').style.display = 'block';
+        }
+
+        // Schließe Fehlermeldung
+        function hideError() {
+            document.getElementById('errorModal').style.display = 'none';
+        }
+
+        // Feuerwerk Logik
+        function startFireworks() {
+            const fireworkColors = ['#FF5733', '#FFBD33', '#DBFF33', '#75FF33', '#33FF57', '#33FFBD', '#33DBFF', '#3375FF', '#5733FF', '#BD33FF', '#FF33C4', '#FF3348'];
+            for (let i = 0; i < 150; i++) {
+                setTimeout(createFirework, i * 40, fireworkColors);
+            }
+            setTimeout(() => {
+                document.getElementById('speech').style.display = 'block';
+                document.getElementById('socialLinks').style.display = 'block';
+            }, 7000);
+        }
+
+        function createFirework(colors) {
+            const firework = document.createElement('div');
+            firework.className = 'firework';
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            const size = Math.random() * 80 + 20; // Großer Bereich für eine eindrucksvollere Wirkung
+            firework.style.backgroundColor = color;
+            firework.style.width = size + 'px';
+            firework.style.height = size + 'px';
+            firework.style.left = Math.random() * 100 + 'vw';
+            firework.style.top = Math.random() * 100 + 'vh';
+
+            const delay = Math.random() * 0.5;
+            firework.style.animationDelay = delay + 's';
+            document.getElementById('fireworks').appendChild(firework);
+
+            setTimeout(() => {
+                firework.remove();
+            }, 3000 + delay * 1000);
+        }
+    </script>
+</body>
+</html>
